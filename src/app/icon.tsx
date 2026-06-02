@@ -1,0 +1,142 @@
+import { ImageResponse } from 'next/og'
+
+export const contentType = 'image/png'
+
+export function generateImageMetadata() {
+  return [
+    { id: '144', contentType: 'image/png', size: { width: 144, height: 144 } },
+    { id: '192', contentType: 'image/png', size: { width: 192, height: 192 } },
+    { id: '512', contentType: 'image/png', size: { width: 512, height: 512 } },
+  ]
+}
+
+function PiggyBankIcon({ s }: { s: number }) {
+  const r = (v: number) => Math.round(v * s / 512)
+
+  return (
+    <div style={{
+      width: s, height: s,
+      background: 'linear-gradient(145deg, #C084FC 0%, #F472B6 55%, #FB7185 100%)',
+      borderRadius: r(96),
+      display: 'flex', position: 'relative',
+    }}>
+      {/* Soft bg glow */}
+      <div style={{ position: 'absolute', top: r(60), left: r(60), width: r(390), height: r(390), borderRadius: '50%', background: 'rgba(255,255,255,0.08)', display: 'flex' }} />
+
+      {/* LEFT EAR */}
+      <div style={{
+        position: 'absolute', top: r(148), left: r(82),
+        width: r(78), height: r(78), borderRadius: '50%',
+        background: 'linear-gradient(145deg, #FFB3D9 0%, #FF85C0 100%)',
+        border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.55)`,
+        boxShadow: `0 ${r(4)}px ${r(14)}px rgba(180,50,120,0.35)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ width: r(42), height: r(42), borderRadius: '50%', background: 'rgba(230,80,150,0.40)', display: 'flex' }} />
+      </div>
+
+      {/* RIGHT EAR */}
+      <div style={{
+        position: 'absolute', top: r(148), left: r(352),
+        width: r(78), height: r(78), borderRadius: '50%',
+        background: 'linear-gradient(145deg, #FFB3D9 0%, #FF85C0 100%)',
+        border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.55)`,
+        boxShadow: `0 ${r(4)}px ${r(14)}px rgba(180,50,120,0.35)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ width: r(42), height: r(42), borderRadius: '50%', background: 'rgba(230,80,150,0.40)', display: 'flex' }} />
+      </div>
+
+      {/* BODY */}
+      <div style={{
+        position: 'absolute', top: r(162), left: r(56),
+        width: r(400), height: r(272),
+        borderRadius: `${r(160)}px ${r(160)}px ${r(140)}px ${r(140)}px`,
+        background: 'linear-gradient(150deg, rgba(255,228,242,0.97) 0%, rgba(255,192,225,0.93) 45%, rgba(255,160,210,0.90) 100%)',
+        border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.72)`,
+        boxShadow: `0 ${r(14)}px ${r(48)}px rgba(180,50,130,0.38), inset 0 ${r(1)}px 0 rgba(255,255,255,0.95)`,
+        overflow: 'hidden',
+        display: 'flex',
+      }}>
+        {/* Glass highlight large */}
+        <div style={{ position: 'absolute', top: r(12), left: r(28), width: r(160), height: r(95), borderRadius: '50%', background: 'rgba(255,255,255,0.32)', display: 'flex' }} />
+        {/* Glass highlight small */}
+        <div style={{ position: 'absolute', top: r(16), left: r(48), width: r(80), height: r(38), borderRadius: '50%', background: 'rgba(255,255,255,0.50)', display: 'flex' }} />
+      </div>
+
+      {/* COIN SLOT */}
+      <div style={{
+        position: 'absolute', top: r(155), left: r(211),
+        width: r(90), height: r(13), borderRadius: r(7),
+        background: 'rgba(110,25,75,0.72)',
+        boxShadow: `inset 0 ${r(2)}px ${r(5)}px rgba(0,0,0,0.45)`,
+        display: 'flex',
+      }} />
+
+      {/* GOLD COIN */}
+      <div style={{
+        position: 'absolute', top: r(115), left: r(232),
+        width: r(48), height: r(48), borderRadius: '50%',
+        background: 'linear-gradient(145deg, #FDE68A 0%, #F59E0B 60%, #B45309 100%)',
+        border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.55)`,
+        boxShadow: `0 ${r(3)}px ${r(12)}px rgba(180,100,0,0.55)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ width: r(26), height: r(26), borderRadius: '50%', border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.40)`, display: 'flex' }} />
+      </div>
+
+      {/* LEFT EYE */}
+      <div style={{
+        position: 'absolute', top: r(232), left: r(158),
+        width: r(34), height: r(34), borderRadius: '50%',
+        background: 'white',
+        boxShadow: `0 ${r(2)}px ${r(8)}px rgba(0,0,0,0.18)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ width: r(18), height: r(18), borderRadius: '50%', background: '#2D1040', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+          <div style={{ width: r(6), height: r(6), borderRadius: '50%', background: 'rgba(255,255,255,0.85)', marginTop: r(2), marginRight: r(1), display: 'flex' }} />
+        </div>
+      </div>
+
+      {/* RIGHT EYE */}
+      <div style={{
+        position: 'absolute', top: r(232), left: r(320),
+        width: r(34), height: r(34), borderRadius: '50%',
+        background: 'white',
+        boxShadow: `0 ${r(2)}px ${r(8)}px rgba(0,0,0,0.18)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ width: r(18), height: r(18), borderRadius: '50%', background: '#2D1040', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+          <div style={{ width: r(6), height: r(6), borderRadius: '50%', background: 'rgba(255,255,255,0.85)', marginTop: r(2), marginRight: r(1), display: 'flex' }} />
+        </div>
+      </div>
+
+      {/* SNOUT */}
+      <div style={{
+        position: 'absolute', top: r(284), left: r(181),
+        width: r(150), height: r(105), borderRadius: '50%',
+        background: 'linear-gradient(155deg, rgba(255,168,210,0.92) 0%, rgba(240,120,178,0.88) 100%)',
+        border: `${Math.max(1, r(2))}px solid rgba(255,255,255,0.42)`,
+        boxShadow: `0 ${r(4)}px ${r(14)}px rgba(190,60,130,0.28)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+      }}>
+        <div style={{ width: r(30), height: r(22), borderRadius: '50%', background: 'rgba(195,65,130,0.52)', marginLeft: r(18), display: 'flex' }} />
+        <div style={{ width: r(30), height: r(22), borderRadius: '50%', background: 'rgba(195,65,130,0.52)', marginRight: r(18), display: 'flex' }} />
+      </div>
+
+      {/* LEGS */}
+      <div style={{ position: 'absolute', top: r(396), left: r(98), width: r(50), height: r(62), borderRadius: `0 0 ${r(18)}px ${r(18)}px`, background: 'linear-gradient(180deg,rgba(255,195,225,0.95) 0%,rgba(255,160,205,0.92) 100%)', border: `${Math.max(1,r(1))}px solid rgba(255,255,255,0.52)`, display: 'flex' }} />
+      <div style={{ position: 'absolute', top: r(396), left: r(162), width: r(50), height: r(62), borderRadius: `0 0 ${r(18)}px ${r(18)}px`, background: 'linear-gradient(180deg,rgba(255,195,225,0.95) 0%,rgba(255,160,205,0.92) 100%)', border: `${Math.max(1,r(1))}px solid rgba(255,255,255,0.52)`, display: 'flex' }} />
+      <div style={{ position: 'absolute', top: r(396), left: r(300), width: r(50), height: r(62), borderRadius: `0 0 ${r(18)}px ${r(18)}px`, background: 'linear-gradient(180deg,rgba(255,195,225,0.95) 0%,rgba(255,160,205,0.92) 100%)', border: `${Math.max(1,r(1))}px solid rgba(255,255,255,0.52)`, display: 'flex' }} />
+      <div style={{ position: 'absolute', top: r(396), left: r(364), width: r(50), height: r(62), borderRadius: `0 0 ${r(18)}px ${r(18)}px`, background: 'linear-gradient(180deg,rgba(255,195,225,0.95) 0%,rgba(255,160,205,0.92) 100%)', border: `${Math.max(1,r(1))}px solid rgba(255,255,255,0.52)`, display: 'flex' }} />
+
+      {/* TAIL */}
+      <div style={{ position: 'absolute', top: r(295), left: r(436), width: r(28), height: r(28), borderRadius: '50%', border: `${Math.max(2, r(7))}px solid rgba(255,170,215,0.92)`, display: 'flex' }} />
+    </div>
+  )
+}
+
+export default function Icon({ id }: { id: string }) {
+  const size = id === '144' ? 144 : id === '192' ? 192 : 512
+  return new ImageResponse(<PiggyBankIcon s={size} />, { width: size, height: size })
+}
