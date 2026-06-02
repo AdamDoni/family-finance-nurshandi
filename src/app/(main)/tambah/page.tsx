@@ -16,7 +16,7 @@ export default function TambahPage() {
   const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
-  const [who, setWho] = useState<'Adam' | 'Rifda'>((session?.user?.name as 'Adam' | 'Rifda') || 'Adam')
+  const [who, setWho] = useState<'Adit' | 'Lulu'>((session?.user?.name as 'Adit' | 'Lulu') || 'Adam')
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const [savedTransaction, setSavedTransaction] = useState<Transaction | null>(null)
@@ -174,10 +174,10 @@ export default function TambahPage() {
           </div>
           <div>
             <label className="block text-[10px] font-semibold t3 mb-2 uppercase tracking-widest">Dicatat oleh</label>
-            <select value={who} onChange={e => setWho(e.target.value as 'Adam' | 'Rifda')}
+            <select value={who} onChange={e => setWho(e.target.value as 'Adit' | 'Lulu')}
               className="inp-select w-full rounded-xl px-3 py-3 text-sm">
-              <option value="Adam">Adam</option>
-              <option value="Rifda">Rifda</option>
+              <option value="Adit">Adit</option>
+              <option value="Lulu">Lulu</option>
             </select>
           </div>
         </div>

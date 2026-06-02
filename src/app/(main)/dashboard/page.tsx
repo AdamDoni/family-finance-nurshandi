@@ -54,8 +54,8 @@ export default function DashboardPage() {
   const daysElapsed = isCurrentMonth ? today.getDate() : daysInMonth
   const avgPerDay = daysElapsed > 0 && hasExpense ? Math.round(data.totalExpense / daysElapsed) : 0
 
-  const adamExp  = data.transactions.filter(t => t.type === 'expense' && t.who === 'Adam').reduce((s, t) => s + t.amount, 0)
-  const rifdaExp = data.transactions.filter(t => t.type === 'expense' && t.who === 'Rifda').reduce((s, t) => s + t.amount, 0)
+  const adamExp  = data.transactions.filter(t => t.type === 'expense' && t.who === 'Adit').reduce((s, t) => s + t.amount, 0)
+  const rifdaExp = data.transactions.filter(t => t.type === 'expense' && t.who === 'Lulu').reduce((s, t) => s + t.amount, 0)
 
   const sectionLabel = "text-[10px] font-semibold t3 uppercase tracking-widest px-1 pt-1"
 
@@ -113,8 +113,8 @@ export default function DashboardPage() {
           {(adamExp > 0 || rifdaExp > 0) ? (
             <div className="space-y-2.5">
               {[
-                { name: 'Adam', val: adamExp, pct: data.totalExpense > 0 ? (adamExp / data.totalExpense) * 100 : 0, color: 'var(--bal)' },
-                { name: 'Rifda', val: rifdaExp, pct: data.totalExpense > 0 ? (rifdaExp / data.totalExpense) * 100 : 0, color: 'var(--neg)' },
+                { name: 'Adit', val: adamExp, pct: data.totalExpense > 0 ? (adamExp / data.totalExpense) * 100 : 0, color: 'var(--bal)' },
+                { name: 'Lulu', val: rifdaExp, pct: data.totalExpense > 0 ? (rifdaExp / data.totalExpense) * 100 : 0, color: 'var(--neg)' },
               ].map(p => (
                 <div key={p.name}>
                   <div className="flex justify-between text-xs mb-1">

@@ -13,7 +13,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: 'Family Finance',
-  description: 'Laporan keuangan Nurshandi & Lulu',
+  description: 'Laporan keuangan Adit & Lulu',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,

@@ -23,7 +23,7 @@ export interface Transaction {
   category: Category
   description: string
   amount: number
-  who: 'Adam' | 'Rifda'
+  who: 'Adit' | 'Lulu'
   notes?: string
   createdAt: string
 }

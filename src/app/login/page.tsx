@@ -39,8 +39,8 @@ export default function LoginPage() {
             >
               <span className="text-2xl">💎</span>
             </div>
-            <h1 className="font-serif text-2xl font-bold t1 tracking-wide">Keuangan Keluarga</h1>
-            <p className="t3 text-sm mt-2">Adam & Rifda</p>
+            <h1 className="font-serif text-2xl font-bold t1 tracking-wide">Family Finance</h1>
+            <p className="t3 text-sm mt-2">Adit & Lulu</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -79,7 +79,7 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-        <p className="text-center t3 text-xs mt-6">Keuangan Keluarga · Pribadi & Rahasia</p>
+        <p className="text-center t3 text-xs mt-6">Family Finance · Pribadi & Rahasia</p>
       </div>
     </div>
   )

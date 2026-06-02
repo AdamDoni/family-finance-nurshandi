@@ -7,7 +7,7 @@ import { getUserFromSheet } from './google-sheets'
 const DEFAULT_HASH = '$2a$10$rUxzBjBUoehXMg0nMnP8guLi.PECDYHPM9B9ZuvJ8bGGqJLwNnq6i'
 
 const USERS = [
-  { id: 'nurshandi', name: 'Nurshandi', email: 'nurshandyd@gmail.com' },
+  { id: 'nurshandi', name: 'Adit', email: 'nurshandyd@gmail.com' },
   { id: 'lulu',      name: 'Lulu',      email: 'luluprimadita@gmail.com' },
 ]
 

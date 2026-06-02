@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Family Finance',
     short_name: 'Family Finance',
-    description: 'Pencatatan keuangan Nurshandi & Lulu',
+    description: 'Pencatatan keuangan Adit & Lulu',
     start_url: '/dashboard',
     display: 'standalone',
     orientation: 'portrait',
