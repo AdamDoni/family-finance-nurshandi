@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { Eye, EyeOff, Lock, CheckCircle } from 'lucide-react'
 import { Spinner } from '@/components/Spinner'
@@ -17,6 +17,10 @@ export default function GantiPasswordPage() {
   const [done, setDone] = useState(false)
 
   const isFirstTime = (session?.user as { mustChangePassword?: boolean })?.mustChangePassword
+
+  useEffect(() => {
+    if (isFirstTime && !current) setCurrent('123456')
+  }, [isFirstTime])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
