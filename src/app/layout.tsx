@@ -17,10 +17,16 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
+    statusBarStyle: 'black-translucent',
     title: 'Family Finance',
+    startupImage: '/apple-splash.png',
   },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  icons: {
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#606C38' },
     { media: '(prefers-color-scheme: dark)', color: '#10B981' },

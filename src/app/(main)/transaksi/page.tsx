@@ -148,22 +148,30 @@ export default function TransaksiPage() {
               {dayTxs.map((t, i) => {
                 const cat = getCategoryInfo(t.category)
                 return (
-                  <div key={t.id} className="flex items-center gap-3 px-4 py-3.5 transition duration-150"
+                  <div key={t.id} className="transition duration-150"
                     style={{ borderTop: i > 0 ? '1px solid var(--border-light)' : 'none' }}>
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                      style={{ background: 'var(--prog-track)', border: '1px solid var(--border-light)' }}>
-                      {cat.emoji}
+                    <div className="flex items-center gap-3 px-4 py-3.5">
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                        style={{ background: 'var(--prog-track)', border: '1px solid var(--border-light)' }}>
+                        {cat.emoji}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium t1 truncate">{t.description}</p>
+                        <p className="text-xs t3">{cat.label} · {t.who}</p>
+                      </div>
+                      <div className="text-sm font-bold flex-shrink-0" style={{ color: t.type === 'income' ? 'var(--pos)' : 'var(--neg)' }}>
+                        {t.type === 'income' ? '+' : '-'}{formatRupiah(t.amount)}
+                      </div>
+                      <button onClick={() => handleDelete(t.id)} className="p-1.5 t3 transition duration-200 ml-1 flex-shrink-0">
+                        <Trash2 size={13} strokeWidth={1.5} />
+                      </button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium t1 truncate">{t.description}</p>
-                      <p className="text-xs t3">{cat.label} · {t.who}</p>
-                    </div>
-                    <div className="text-sm font-bold flex-shrink-0" style={{ color: t.type === 'income' ? 'var(--pos)' : 'var(--neg)' }}>
-                      {t.type === 'income' ? '+' : '-'}{formatRupiah(t.amount)}
-                    </div>
-                    <button onClick={() => handleDelete(t.id)} className="p-1.5 t3 transition duration-200 ml-1 flex-shrink-0">
-                      <Trash2 size={13} strokeWidth={1.5} />
-                    </button>
+                    {t.notes && (
+                      <div className="px-4 pb-3 flex items-start gap-2">
+                        <div className="w-9 flex-shrink-0" />
+                        <p className="text-xs t3 italic">{t.notes}</p>
+                      </div>
+                    )}
                   </div>
                 )
               })}

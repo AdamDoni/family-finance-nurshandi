@@ -8,18 +8,34 @@ import { TrendChart } from '@/components/TrendChart'
 import { CategoryCompareChart, CompareEntry } from '@/components/CategoryCompareChart'
 import { RecentTransactions } from '@/components/RecentTransactions'
 import { SummaryData } from '@/types'
-import { ArrowUpRight, ArrowDownRight, Users, CalendarDays, PlusCircle } from 'lucide-react'
+import { ArrowUpRight, ArrowDownRight, Users, CalendarDays, PlusCircle, Wallet } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+interface BalanceRecord {
+  date: string
+  amount: number
+  notes?: string
+}
 
 export default function DashboardPage() {
   const [data, setData] = useState<SummaryData | null>(null)
+  const [balances, setBalances] = useState<BalanceRecord[]>([])
   const [month, setMonth] = useState(getCurrentMonth())
   const [loading, setLoading] = useState(true)
+  const [tab, setTab] = useState<'monthly' | 'balance'>('monthly')
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/api/summary?month=${month}`)
-      .then(r => r.json())
-      .then(d => { setData(d); setLoading(false) })
+    Promise.all([
+      fetch(`/api/summary?month=${month}`).then(r => r.json()),
+      fetch(`/api/balance`).then(r => r.json()),
+    ])
+      .then(([summary, balance]) => {
+        setData(summary)
+        setBalances(Array.isArray(balance) ? balance : [])
+        setLoading(false)
+      })
+      .catch(() => { setLoading(false) })
   }, [month])
 
   if (loading) {
@@ -62,17 +78,88 @@ export default function DashboardPage() {
   return (
     <div className="p-4 space-y-4 max-w-md mx-auto">
 
-      {/* Month selector */}
-      <div className="flex items-center justify-between pt-2">
+      {/* Month selector + Tab toggle */}
+      <div className="flex items-center justify-between pt-2 mb-3">
         <h2 className="font-serif font-semibold t1 text-lg">{formatMonthYear(month + '-01')}</h2>
-        <input
-          type="month" value={month} onChange={e => setMonth(e.target.value)}
-          className="inp text-sm rounded-xl px-3 py-1.5 transition"
-        />
+        <div className="flex gap-2">
+          <input
+            type="month" value={month} onChange={e => setMonth(e.target.value)}
+            className="inp text-sm rounded-xl px-3 py-1.5 transition"
+          />
+          <div className="flex rounded-xl p-1 text-xs glass gap-1">
+            <button
+              onClick={() => setTab('monthly')}
+              className={cn('px-3 py-1.5 rounded-lg transition duration-200 font-medium flex items-center gap-1.5',
+                tab === 'monthly' ? 't1' : 't3'
+              )}
+              style={tab === 'monthly' ? { background: 'var(--border)' } : {}}
+            >
+              <CalendarDays size={13} strokeWidth={1.5} />
+              <span className="hidden sm:inline">Bulanan</span>
+            </button>
+            <button
+              onClick={() => setTab('balance')}
+              className={cn('px-3 py-1.5 rounded-lg transition duration-200 font-medium flex items-center gap-1.5',
+                tab === 'balance' ? 't1' : 't3'
+              )}
+              style={tab === 'balance' ? { background: 'var(--border)' } : {}}
+            >
+              <Wallet size={13} strokeWidth={1.5} />
+              <span className="hidden sm:inline">Saldo</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* ── Hero Card ── */}
-      <div className="relative overflow-hidden rounded-2xl p-5" style={{ background: 'var(--hero-gradient)' }}>
+      {/* Conditional: Monthly view or Balance view */}
+      {tab === 'balance' ? (
+        <div className="space-y-4">
+          {/* Balance View */}
+          <div className="relative overflow-hidden rounded-2xl p-5" style={{ background: 'var(--hero-gradient)' }}>
+            <div className="absolute top-0 right-0 w-52 h-52 rounded-full blur-3xl translate-x-16 -translate-y-14 pointer-events-none" style={{ background: 'var(--hero-glow1)' }} />
+            <div className="relative">
+              <p className="text-[10px] t2 uppercase tracking-widest font-medium mb-3">Total Saldo Kas</p>
+              {balances.length > 0 ? (
+                <>
+                  <p className="text-3xl font-serif font-bold t1 mb-0.5 leading-tight">{formatRupiah(balances[0].amount)}</p>
+                  <p className="t3 text-xs">per {balances[0].date}</p>
+                  {balances[0].notes && <p className="t3 text-xs mt-2 italic">📝 {balances[0].notes}</p>}
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-2xl mb-2">💼</p>
+                  <p className="t3 text-sm">Belum ada data saldo kas</p>
+                  <p className="t3 text-xs mt-1">Tambahkan data saldo di Google Sheet</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Balance History */}
+          {balances.length > 0 && (
+            <div className="glass rounded-2xl p-4">
+              <h3 className="font-semibold t1 text-sm mb-4">Riwayat Saldo</h3>
+              <div className="space-y-3">
+                {balances.map((b, i) => (
+                  <div key={i} className="flex items-start justify-between pb-3" style={{ borderBottom: i < balances.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
+                    <div>
+                      <p className="text-sm font-medium t1">{b.date}</p>
+                      {b.notes && <p className="text-xs t3 mt-0.5">{b.notes}</p>}
+                    </div>
+                    <p className="text-sm font-bold" style={{ color: b.amount >= 0 ? 'var(--pos)' : 'var(--neg)' }}>
+                      {b.amount >= 0 ? '+' : ''}{formatRupiah(b.amount)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+
+        {/* ── Hero Card ── */}
+        <div className="relative overflow-hidden rounded-2xl p-5" style={{ background: 'var(--hero-gradient)' }}>
         <div className="absolute top-0 right-0 w-52 h-52 rounded-full blur-3xl translate-x-16 -translate-y-14 pointer-events-none" style={{ background: 'var(--hero-glow1)' }} />
         <div className="absolute bottom-0 left-0 w-36 h-36 rounded-full blur-2xl -translate-x-8 translate-y-8 pointer-events-none" style={{ background: 'var(--hero-glow2)' }} />
         <div className="relative">
@@ -249,14 +336,17 @@ export default function DashboardPage() {
         <TrendChart data={data.trend} />
       </div>
 
-      {/* ── Transaksi Terbaru ── */}
-      <div className="glass rounded-2xl p-4">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold t1 text-sm">Transaksi Bulan Ini</h3>
-          <a href="/transaksi" className="text-xs font-medium text-acc" style={{ color: 'var(--acc)' }}>Lihat semua →</a>
+        {/* ── Transaksi Terbaru ── */}
+        <div className="glass rounded-2xl p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold t1 text-sm">Transaksi Bulan Ini</h3>
+            <a href="/transaksi" className="text-xs font-medium text-acc" style={{ color: 'var(--acc)' }}>Lihat semua →</a>
+          </div>
+          <RecentTransactions transactions={data.transactions} />
         </div>
-        <RecentTransactions transactions={data.transactions} />
-      </div>
+
+        </div>
+      )}
 
     </div>
   )
