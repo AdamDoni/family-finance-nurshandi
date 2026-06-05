@@ -11,10 +11,10 @@ import { SummaryData } from '@/types'
 import { ArrowUpRight, ArrowDownRight, Users, CalendarDays, PlusCircle, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface BalanceRecord {
-  date: string
-  amount: number
-  notes?: string
+interface MonthlyBalance {
+  month: string
+  monthlyBalance: number
+  cumulativeBalance: number
 }
 
 export default function DashboardPage() {
@@ -118,39 +118,46 @@ export default function DashboardPage() {
           <div className="relative overflow-hidden rounded-2xl p-5" style={{ background: 'var(--hero-gradient)' }}>
             <div className="absolute top-0 right-0 w-52 h-52 rounded-full blur-3xl translate-x-16 -translate-y-14 pointer-events-none" style={{ background: 'var(--hero-glow1)' }} />
             <div className="relative">
-              <p className="text-[10px] t2 uppercase tracking-widest font-medium mb-3">Total Saldo Kas</p>
+              <p className="text-[10px] t2 uppercase tracking-widest font-medium mb-3">Total Saldo Kas Akumulasi</p>
               {balances.length > 0 ? (
                 <>
-                  <p className="text-3xl font-serif font-bold t1 mb-0.5 leading-tight">{formatRupiah(balances[0].amount)}</p>
-                  <p className="t3 text-xs">per {balances[0].date}</p>
-                  {balances[0].notes && <p className="t3 text-xs mt-2 italic">📝 {balances[0].notes}</p>}
+                  <p className="text-3xl font-serif font-bold t1 mb-0.5 leading-tight">{formatRupiah(balances[balances.length - 1].cumulativeBalance)}</p>
+                  <p className="t3 text-xs">Total akumulasi hingga {balances[balances.length - 1].month}</p>
                 </>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-2xl mb-2">💼</p>
-                  <p className="t3 text-sm">Belum ada data saldo kas</p>
-                  <p className="t3 text-xs mt-1">Tambahkan data saldo di Google Sheet</p>
+                  <p className="t3 text-sm">Belum ada transaksi</p>
+                  <p className="t3 text-xs mt-1">Data saldo akan muncul setelah ada transaksi</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Balance History */}
+          {/* Monthly Breakdown */}
           {balances.length > 0 && (
             <div className="glass rounded-2xl p-4">
-              <h3 className="font-semibold t1 text-sm mb-4">Riwayat Saldo</h3>
+              <h3 className="font-semibold t1 text-sm mb-4">Riwayat Saldo per Bulan</h3>
               <div className="space-y-3">
-                {balances.map((b, i) => (
-                  <div key={i} className="flex items-start justify-between pb-3" style={{ borderBottom: i < balances.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
-                    <div>
-                      <p className="text-sm font-medium t1">{b.date}</p>
-                      {b.notes && <p className="text-xs t3 mt-0.5">{b.notes}</p>}
+                {balances.map((b, i) => {
+                  const isNegative = b.monthlyBalance < 0
+                  return (
+                    <div key={i} className="pb-3" style={{ borderBottom: i < balances.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
+                      <div className="flex items-start justify-between mb-1">
+                        <p className="text-sm font-medium t1">{b.month}</p>
+                        <div className="text-right">
+                          <p className="text-sm font-bold" style={{ color: isNegative ? 'var(--neg)' : 'var(--pos)' }}>
+                            {isNegative ? '' : '+'}{formatRupiah(b.monthlyBalance)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs t3">Saldo akumulasi:</p>
+                        <p className="text-xs font-semibold t1">{formatRupiah(b.cumulativeBalance)}</p>
+                      </div>
                     </div>
-                    <p className="text-sm font-bold" style={{ color: b.amount >= 0 ? 'var(--pos)' : 'var(--neg)' }}>
-                      {b.amount >= 0 ? '+' : ''}{formatRupiah(b.amount)}
-                    </p>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )}

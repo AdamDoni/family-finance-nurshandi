@@ -1,47 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-options'
-import { google } from 'googleapis'
+import { getTransactions } from '@/lib/google-sheets'
 
-interface BalanceRecord {
-  date: string
-  amount: number
-  notes?: string
-}
-
-async function getBalance(): Promise<BalanceRecord[]> {
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    },
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  })
-
-  const sheets = google.sheets({ version: 'v4', auth })
-  const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID
-
-  if (!spreadsheetId) return []
-
-  try {
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: 'saldo!A2:C',
-    })
-
-    const rows = response.data.values || []
-    return rows
-      .filter(row => row[0] && row[1])
-      .map(row => ({
-        date: row[0],
-        amount: parseFloat(row[1]) || 0,
-        notes: row[2] || '',
-      }))
-      .sort((a, b) => b.date.localeCompare(a.date))
-  } catch (e) {
-    console.error('Error reading balance sheet:', e)
-    return []
-  }
+interface MonthlyBalance {
+  month: string
+  monthlyBalance: number
+  cumulativeBalance: number
 }
 
 export async function GET() {
@@ -49,8 +14,38 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
-    const balances = await getBalance()
-    return NextResponse.json(balances)
+    if (!process.env.GOOGLE_SPREADSHEET_ID) return NextResponse.json([])
+
+    const allTransactions = await getTransactions()
+
+    // Group by month
+    const monthlyData: Record<string, { income: number; expense: number }> = {}
+    allTransactions.forEach(t => {
+      const month = t.date.slice(0, 7)
+      if (!monthlyData[month]) {
+        monthlyData[month] = { income: 0, expense: 0 }
+      }
+      if (t.type === 'income') {
+        monthlyData[month].income += t.amount
+      } else {
+        monthlyData[month].expense += t.amount
+      }
+    })
+
+    // Calculate cumulative balance
+    const months = Object.keys(monthlyData).sort()
+    let cumulativeBalance = 0
+    const balances: MonthlyBalance[] = months.map(month => {
+      const monthlyBalance = monthlyData[month].income - monthlyData[month].expense
+      cumulativeBalance += monthlyBalance
+      return {
+        month,
+        monthlyBalance,
+        cumulativeBalance,
+      }
+    })
+
+    return NextResponse.json(balances.reverse())
   } catch (e) {
     console.error('Balance API error:', e)
     return NextResponse.json({ error: 'Failed to fetch balance' }, { status: 500 })
